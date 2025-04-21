@@ -42,6 +42,7 @@ class Repository {
     return imagesList;
   }
 
+  // Get Images by Id
   Future<Images> getImageById({required int id}) async {
     final url = "${baseURL}photos/$id";
 
@@ -60,6 +61,30 @@ class Repository {
       }
     } catch (_) {}
     return image;
+  }
+
+  // Get image by Search
+  Future<List<Images>> getImagesBySearch({required String query}) async {
+    final url = "${baseURL}search?query=$query&per_page=80";
+    List<Images> imagesList = [];
+
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {'Authorization': apiKey},
+      );
+
+      if (response.statusCode >= 200 && response.statusCode <= 299) {
+        final jsonData = json.decode(response.body);
+
+        for (final json in jsonData["photos"] as Iterable) {
+          final image = Images.fromJson(json);
+          imagesList.add(image);
+        }
+      }
+    } catch (_) {}
+
+    return imagesList;
   }
 
   Future<void> downloadImage({
