@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:wallpaper_app/modal/modal.dart';
+import 'package:wallpaper_app/preview_page.dart';
 import 'package:wallpaper_app/repo/repository.dart';
 
 class MainPage extends StatefulWidget {
@@ -177,6 +178,22 @@ class _MainPageState extends State<MainPage> {
                           itemBuilder: (context, index) {
                             double height = (index % 10 + 1) * 100;
                             return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) => PreviewPage(
+                                          imageId:
+                                              snapshot.data![index].imageID,
+                                          imageUrl:
+                                              snapshot
+                                                  .data![index]
+                                                  .imagePotraitPath,
+                                        ),
+                                  ),
+                                );
+                              },
                               child: ClipRRect(
                                 child: CachedNetworkImage(
                                   fit: BoxFit.cover,
